@@ -43,7 +43,7 @@ class EditForm extends Component {
               initialValue: name,
             })(<Input placeholder="名称" />)}
           </Form.Item>
-          <Form.Item label="类型:">
+          {/* <Form.Item label="类型:">
             {getFieldDecorator("type", {
               initialValue: type,
             })(
@@ -52,7 +52,7 @@ class EditForm extends Component {
                 <Select.Option value={1}>常规任务</Select.Option>
               </Select>
             )}
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item label="状态:">
             {getFieldDecorator("status", {
               initialValue: status,

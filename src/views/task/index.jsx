@@ -324,7 +324,7 @@ class TaskComponent extends Component {
           >
             <Column title="任务ID" dataIndex="id" key="id" width={200} align="center" sorter={(a, b) => a.id - b.id} />
             <Column title="任务名称" dataIndex="name" key="name" width={200} align="center" />
-            <Column title="任务类型" dataIndex="type" key="type" width={100} align="center" render={(type) => {
+            <Column title="任务类型" dataIndex="type" key="type" width={120} align="center" render={(type) => {
               let task_type =
                 type === 1 ? "常规任务" : type === 0 ? "自动任务" : "";
               return (
@@ -333,7 +333,7 @@ class TaskComponent extends Component {
                 </Tag>
               );
             }} />
-            <Column title="机器人ID" dataIndex="robot_id" key="robot_id" width={195} align="center" />
+            <Column title="机器人ID" dataIndex="robot_id" key="robot_id" width={120} align="center" />
             <Column title="任务状态" dataIndex="status" key="status" width={195} align="center" render={(status) => {
               let color =
                 status === 1 ? "green" : status === 2 ? "blue" : status === 3 ? "red" : "";
@@ -367,6 +367,10 @@ class TaskComponent extends Component {
               </span>
             )} />
           </Table>
+          <br></br>
+          <Button type="primary">
+            打开引导
+          </Button>
         </Card>
         <br />
         <Pagination
