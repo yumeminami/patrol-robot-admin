@@ -42,7 +42,7 @@ export function addItem(data) {
 
 export async function deleteItem(data) {
     try {
-        const response = await service.delete(`/tasks/${data.id}`);
+        const response = await service.delete(`/checkpoints/${data.id}`);
         console.log(response.data);
         return {
             code: 200,
