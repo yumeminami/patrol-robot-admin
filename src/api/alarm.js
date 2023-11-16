@@ -1,14 +1,12 @@
 import request from '@/utils/request'
 import service from '../utils/request'
-import Item from 'antd/lib/list/Item';
 
-let list = []
 
 export async function alarmList(data) {
     try {
         console.log(data)
         const { pageNumber, pageSize, name, status, level } = data;
-        const response = await service.get('/alarm_logs');
+        const response = await service.get('/alarm_logs?all=true');
         let list = response.data;
         let total = response.data.length
         let start = (pageNumber - 1) * pageSize;
@@ -39,17 +37,9 @@ export async function alarmList(data) {
 
 }
 
-export function addItem(data) {
-    return request({
-        url: '/task/add',
-        method: 'post',
-        data
-    })
-}
-
 export async function deleteItem(data) {
     try {
-        const response = await service.delete(`/tasks/${data.id}`);
+        const response = await service.delete(`/alarm_logs/${data.id}`);
         console.log(response.data);
         return {
             code: 200,

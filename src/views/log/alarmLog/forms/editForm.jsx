@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Input, DatePicker, Select, Rate, Modal } from "antd";
+import { Form, Input, Select, Modal } from "antd";
 import moment from "moment";
 import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css"; // 引入样式
@@ -18,7 +18,7 @@ class EditForm extends Component {
   };
 
   closeLightbox = () => {
-    this.setState({ isOpen: false});
+    this.setState({ isOpen: false });
   };
 
 

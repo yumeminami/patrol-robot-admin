@@ -16,7 +16,7 @@ import {
   Radio,
   Image
 } from "antd";
-import { alarmList, deleteItem, editItem, addItem } from "@/api/alarm";
+import { alarmList, deleteItem, editItem } from "@/api/alarm";
 import EditForm from "./forms/editForm"
 const { Column } = Table;
 const { Panel } = Collapse;
@@ -196,8 +196,8 @@ class TaskComponent extends Component {
       loading: true,
     });
     import("@/lib/Export2Excel").then((excel) => {
-      const tHeader = ["Id", "Name", "Type", "Status", "RobotId", "ExecutionTimes"];
-      const filterVal = ["id", "name", "type", "status", "robot_id", "execution_times"];
+      const tHeader = ["Id", "异常级别（0：严重，1：警告）", "异常类型", "异常状态（0：未处理，1：已处理）", "发生时间", "异常详情", "发生地点(mm)"];
+      const filterVal = ["id", "level", "type", "status", "time", "detail", "location"];
       const list = this.state.selectedRows;
       const data = this.formatJson(filterVal, list);
       excel.export_json_to_excel({
@@ -342,15 +342,6 @@ class TaskComponent extends Component {
             }} />
             <Column title="发生时间" dataIndex="time" key="time" width={195} align="center" sorter={(a, b) => a.time - b.time} />
             <Column title="异常详情" dataIndex="detail" key="detail" width={195} align="center" />
-            <Column title="IMG" dataIndex="img_url" key="img_url" width={195} align="center" render={(img_url) => {
-              return (
-                img_url ? <img
-                  src={img_url}
-                  alt="IMG"
-                  style={{ width: '50px', height: '50px' }} // Adjust dimensions as needed
-                /> : ""
-              )
-            }} />
             <Column title="发生地点(mm)" dataIndex="location" key="location" width={195} align="center" />
             <Column title="操作" key="action" width={195} align="center" render={(text, row) => (
               <span>
