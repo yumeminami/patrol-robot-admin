@@ -18,6 +18,7 @@ const Menu1_2_1 = Loadable({loader: () => import(/*webpackChunkName:'Menu1_2_1'*
 const Table = Loadable({loader: () => import(/*webpackChunkName:'Table'*/'@/views/table'),loading: Loading});
 const Task = Loadable({loader: () => import(/*webpackChunkName:'Task'*/'@/views/task'),loading: Loading});
 const AlarmLog = Loadable({loader: () => import(/*webpackChunkName:'Task'*/'@/views/log/alarmLog'),loading: Loading});
+const Tasklog = Loadable({loader: () => import(/*webpackChunkName:'Task'*/'@/views/log/taskLog'),loading: Loading});
 const Algorithm = Loadable({loader: () => import(/*webpackChunkName:'Task'*/'@/views/setting/algorithms'),loading: Loading});
 const StepForm = Loadable({loader: () => import(/*webpackChunkName:'StepForm'*/'@/views/step-forms/step-form'),loading: Loading});
 const PatrolImage = Loadable({loader: () => import(/*webpackChunkName:'PatrolImage'*/'@/views/patrol-data/patrolImage'),loading: Loading});
@@ -50,6 +51,7 @@ export default [
   { path: "/table", component: Table, roles: ["admin", "editor"] },
   { path: "/task", component: Task, roles: ["admin", "editor"] },
   { path: "/log/alarm", component: AlarmLog, roles: ["admin", "editor"] },
+  { path: "/log/task", component: Tasklog, roles: ["admin", "editor"] },
   { path: "/setting/algorithms", component: Algorithm, roles: ["admin", "editor"] },
   { path: "/setting/checkpoints", component: Checkpoint, roles: ["admin", "editor"] },
   { path: "/patrol-data/patrol-image", component: PatrolImage, roles: ["admin","editor"] },

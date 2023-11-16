@@ -13,11 +13,11 @@ import {
   Select,
   Card,
   Icon,
-  Radio
+  Radio,
+  Image
 } from "antd";
-import { taskList, deleteItem, editItem, addItem } from "@/api/task";
+import { taskLogList, deleteItem } from "@/api/taskLog";
 import EditForm from "./forms/editForm"
-import service from "../../utils/request";
 const { Column } = Table;
 const { Panel } = Collapse;
 class TaskComponent extends Component {
@@ -45,7 +45,7 @@ class TaskComponent extends Component {
   };
   fetchData = () => {
     this.setState({ loading: true });
-    taskList(this.state.listQuery).then((response) => {
+    taskLogList(this.state.listQuery).then((response) => {
       this.setState({ loading: false });
       console.log(response)
       const list = response.list;
@@ -150,32 +150,6 @@ class TaskComponent extends Component {
   };
 
 
-  handleOk = () => {
-    const { form } = this.editformRef.props;
-    form.validateFields((err, fieldsValue) => {
-      if (err) {
-        return;
-      }
-      const values = {
-        ...fieldsValue,
-      };
-      this.setState({ editModalLoading: true, });
-      editItem(values).then((response) => {
-        form.resetFields();
-        console.log(response)
-        if (response.code === 200) {
-          this.setState({ editModalVisible: false, editModalLoading: false });
-          message.success("编辑成功")
-        } else {
-          this.setState({ editModalLoading: false });
-          message.error("编辑失败")
-        }
-        this.fetchData()
-      }).catch(e => {
-        message.error("编辑失败,请重试!")
-      })
-    });
-  };
 
   handleCancel = _ => {
     this.setState({
@@ -196,8 +170,8 @@ class TaskComponent extends Component {
       loading: true,
     });
     import("@/lib/Export2Excel").then((excel) => {
-      const tHeader = ["Id", "Name", "Type", "Status", "RobotId", "ExecutionTimes"];
-      const filterVal = ["id", "name", "type", "status", "robot_id", "execution_times"];
+      const tHeader = ["Id", "任务ID", "任务类型（0：自动任务，1：常规任务）", "机器人ID", "执行时间", "任务状态（0：完成，1：失败）"];
+      const filterVal = ["id", "task_id", "type", "robot_id", "execution_date", "status"];
       const list = this.state.selectedRows;
       const data = this.formatJson(filterVal, list);
       excel.export_json_to_excel({
@@ -246,9 +220,7 @@ class TaskComponent extends Component {
     };
     const title = (
       <span>
-        <Button type='primary' onClick={this.handleAddTask}>添加任务</Button>
-        <Divider type="vertical" />
-        {this.state.seleted ? <Button type='danger' onClick={this.handleBatchDelete}>删除任务</Button> : null}
+        {this.state.seleted ? <Button type='danger' onClick={this.handleBatchDelete}>删除记录</Button> : null}
       </span>
     )
 
@@ -257,16 +229,12 @@ class TaskComponent extends Component {
         <Collapse defaultActiveKey={["1"]}>
           <Panel header="筛选" key="1">
             <Form layout="inline">
-              <Form.Item label="任务名称:">
-                <Input onChange={this.filterNameChange} />
-              </Form.Item>
               <Form.Item label="任务状态:">
                 <Select
                   style={{ width: 120 }}
                   onChange={this.filterStatusChange}>
-                  <Select.Option value={1}>执行中</Select.Option>
-                  <Select.Option value={2}>待命中</Select.Option>
-                  <Select.Option value={3}>已停止</Select.Option>
+                  <Select.Option value={0}>完成</Select.Option>
+                  <Select.Option value={1}>失败</Select.Option>
                 </Select>
               </Form.Item>
               <Form.Item label="任务类型:">
@@ -322,8 +290,8 @@ class TaskComponent extends Component {
             pagination={false}
             rowSelection={rowSelection}
           >
-            <Column title="任务ID" dataIndex="id" key="id" width={200} align="center" sorter={(a, b) => a.id - b.id} />
-            <Column title="任务名称" dataIndex="name" key="name" width={200} align="center" />
+            <Column title="ID" dataIndex="id" key="id" width={200} align="center" sorter={(a, b) => a.id - b.id} />
+            <Column title="任务ID" dataIndex="task_id" key="task_id" width={100} align="center" />
             <Column title="任务类型" dataIndex="type" key="type" width={100} align="center" render={(type) => {
               let task_type =
                 type === 1 ? "常规任务" : type === 0 ? "自动任务" : "";
@@ -333,24 +301,21 @@ class TaskComponent extends Component {
                 </Tag>
               );
             }} />
-            <Column title="机器人ID" dataIndex="robot_id" key="robot_id" width={195} align="center" />
+            <Column title="机器人ID" dataIndex="robot_id" key="robot_id" width={100} align="center" />
+            <Column title="执行时间" dataIndex="execution_date" key="execution_date" width={150} align="center" />
             <Column title="任务状态" dataIndex="status" key="status" width={195} align="center" render={(status) => {
               let color =
-                status === 1 ? "green" : status === 2 ? "blue" : status === 3 ? "red" : "";
+                status === 0 ? "green" : "red";
               let task_status =
-                status === 1 ? "执行中" : status === 2 ? "待命中" : status === 3 ? "已停止" : "";
+                status === 0 ? "完成" : "失败";
               return (
                 <Tag color={color} key={status}>
                   {task_status}
                 </Tag>
               );
             }} />
-            <Column title="执行时间" dataIndex="execution_times" key="execution_times" width={195} align="center" />
-            <Column title="执行频率" dataIndex="execution_frequency" key="execution_frequency" width={195} align="center" />
             <Column title="操作" key="action" width={195} align="center" render={(text, row) => (
               <span>
-                <Button type="primary" shape="circle" icon="edit" title="编辑" onClick={this.handleEdit.bind(null, row)} />
-                <Divider type="vertical" />
                 <Button type="primary" shape="circle" icon="delete" title="删除" onClick={this.handleDelete.bind(null, row)} />
               </span>
             )} />
@@ -368,21 +333,6 @@ class TaskComponent extends Component {
           showQuickJumper
           hideOnSinglePage={true}
         />
-        <EditForm
-          currentRowData={this.state.currentRowData}
-          wrappedComponentRef={formRef => this.editformRef = formRef}
-          visible={this.state.editModalVisible}
-          confirmLoading={this.state.editModalLoading}
-          onCancel={this.handleCancel}
-          onOk={this.handleOk}
-        />
-        {/* <AddTaskForm
-          wrappedComponentRef={formRef => this.addformRef = formRef}
-          visible={this.state.addModalVisible}
-          confirmLoading={this.state.addModalLoading}
-          onCancel={this.handleAddTaskCancel}
-          onOk={this.handleAddTaskOK}
-        /> */}
       </div>
     );
   }

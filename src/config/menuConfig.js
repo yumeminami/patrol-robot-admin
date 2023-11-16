@@ -169,7 +169,7 @@ const menuList = [
       },
       {
         title: "任务日志",
-        path: "/excel/upload",
+        path: "/log/task",
         icon: "check-circle",
         roles: ["admin", "editor"]
       }
