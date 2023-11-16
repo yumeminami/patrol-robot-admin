@@ -60,28 +60,11 @@ class PatrolImageComponent extends Component {
     this._isMounted = false;
   }
 
-  filterNameChange = (e) => {
-    let value = e.target.value
+  filterAlarmChange = (value) => {
     this.setState((state) => ({
       listQuery: {
         ...state.listQuery,
-        name: value,
-      }
-    }));
-  };
-  filterStatusChange = (value) => {
-    this.setState((state) => ({
-      listQuery: {
-        ...state.listQuery,
-        status: value,
-      }
-    }));
-  };
-  filterLevelChange = (value) => {
-    this.setState((state) => ({
-      listQuery: {
-        ...state.listQuery,
-        level: value,
+        alarm: value,
       }
     }));
   };
@@ -209,17 +192,9 @@ class PatrolImageComponent extends Component {
               <Form.Item label="异常状态:">
                 <Select
                   style={{ width: 120 }}
-                  onChange={this.filterStatusChange}>
-                  <Select.Option value={0}>未处理</Select.Option>
-                  <Select.Option value={1}>已处理</Select.Option>
-                </Select>
-              </Form.Item>
-              <Form.Item label="异常级别:">
-                <Select
-                  style={{ width: 120 }}
-                  onChange={this.filterLevelChange}>
-                  <Select.Option value={0}>严重</Select.Option>
-                  <Select.Option value={1}>警告</Select.Option>
+                  onChange={this.filterAlarmChange}>
+                  <Select.Option value={true}>异常</Select.Option>
+                  <Select.Option value={false}>正常</Select.Option>
                 </Select>
               </Form.Item>
               <Form.Item>
