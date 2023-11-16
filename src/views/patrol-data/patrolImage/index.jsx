@@ -1,23 +1,18 @@
 import React, { Component } from "react";
-import { useState } from "react";
 import {
   Table,
   Tag,
   Form,
   Button,
-  Input,
   Collapse,
   Pagination,
-  Divider,
   message,
   Select,
   Card,
-  Icon,
-  Radio,
-  Image
 } from "antd";
 import { imageList, deleteItem } from "@/api/image";
-import EditForm from "./forms/editForm"
+import Lightbox from "react-image-lightbox";
+import "react-image-lightbox/style.css"; // 引入样式
 const { Column } = Table;
 const { Panel } = Collapse;
 class PatrolImageComponent extends Component {
@@ -42,6 +37,8 @@ class PatrolImageComponent extends Component {
     filename: "excel-file",
     autoWidth: true,
     bookType: "xlsx",
+    isOpen: false,
+    img_url: "",
   };
   fetchData = () => {
     this.setState({ loading: true });
@@ -153,34 +150,6 @@ class PatrolImageComponent extends Component {
     return jsonData.map(v => filterVal.map(j => v[j]))
   }
 
-  handleDownload = (type) => {
-    if (this.state.selectedRowKeys.length === 0) {
-      message.error("至少选择一项进行导出");
-      return;
-    }
-    this.setState({
-      loading: true,
-    });
-    import("@/lib/Export2Excel").then((excel) => {
-      const tHeader = ["Id", "Name", "Type", "Status", "RobotId", "ExecutionTimes"];
-      const filterVal = ["id", "name", "type", "status", "robot_id", "execution_times"];
-      const list = this.state.selectedRows;
-      const data = this.formatJson(filterVal, list);
-      excel.export_json_to_excel({
-        header: tHeader,
-        data,
-        filename: this.state.filename,
-        autoWidth: this.state.autoWidth,
-        bookType: this.state.bookType,
-      });
-      this.setState({
-        selectedRowKeys: [],
-        seleted: false,
-        loading: false,
-      });
-    });
-  };
-
   filenameChange = (e) => {
     this.setState({
       filename: e.target.value,
@@ -202,6 +171,22 @@ class PatrolImageComponent extends Component {
     this.setState({ seleted: selectedRowKeys.length > 0 })
     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
   };
+
+  openImageLightbox = () => {
+    this.setState({ isOpen: true });
+  };
+
+  closeLightbox = () => {
+    this.setState({ isOpen: false });
+  };
+
+  setImgUrl = (img_url) => {
+    this.setState({ img_url });
+  }
+
+  clearImgUrl = () => {
+    this.setState({ img_url: "" });
+  }
 
   render() {
 
@@ -246,32 +231,6 @@ class PatrolImageComponent extends Component {
           </Panel>
         </Collapse>
         <br />
-        <Collapse defaultActiveKey={["1"]}>
-          <Panel header="导出选项" key="1">
-            <Form layout="inline">
-              <Form.Item label="文件名:">
-                <Input
-                  style={{ width: "250px" }}
-                  prefix={
-                    <Icon type="file" style={{ color: "rgba(0,0,0,.25)" }} />
-                  }
-                  placeholder="请输入文件名(默认excel-file)"
-                  onChange={this.filenameChange}
-                />
-              </Form.Item>
-              <Form.Item>
-                <Button
-                  type="primary"
-                  icon="file-excel"
-                  onClick={this.handleDownload.bind(null)}
-                >
-                  导出已选择项
-                </Button>
-              </Form.Item>
-            </Form>
-          </Panel>
-        </Collapse>
-        <br />
 
         <Card title={title}>
           <Table
@@ -283,44 +242,33 @@ class PatrolImageComponent extends Component {
             rowSelection={rowSelection}
           >
             <Column title="ID" dataIndex="id" key="id" width={200} align="center" sorter={(a, b) => a.id - b.id} />
-            <Column title="异常级别" dataIndex="level" key="level" width={200} align="center" render={(level) => {
-              let color =
-                level === 0 ? "red" : level === 1 ? "yellow" : "";
-              let alarm_level =
-                level === 0 ? "严重" : level === 1 ? "警告" : "";
-              return (
-                <Tag color={color} key={level}>
-                  {alarm_level}
-                </Tag>
-              );
-            }} />
             <Column title="任务ID" dataIndex="task_id" key="task_id" width={120} align="center" />
-            <Column title="异常状态" dataIndex="status" key="status" width={195} align="center" sorter={(a, b) => a.status - b.status} render={(status) => {
-              let color =
-                status === 1 ? "green" : status === 0 ? "red" : "";
-              let alarm_status =
-                status === 1 ? "已处理" : status === 0 ? "未处理" : "";
-              return (
-                <Tag color={color} key={status}>
-                  {alarm_status}
-                </Tag>
-              );
-            }} />
-            <Column title="发生时间" dataIndex="time" key="time" width={195} align="center" sorter={(a, b) => a.time - b.time} />
-            <Column title="异常详情" dataIndex="detail" key="detail" width={195} align="center" />
+            <Column title="巡检点ID" dataIndex="checkpoint_id" key="checkpoint_id" width={120} align="center" />
             <Column title="巡检图片" dataIndex="image_url" key="image_url" width={195} align="center" render={(image_url) => {
               return (
                 image_url ? <img
                   src={image_url}
                   alt="IMG"
                   style={{ width: '50px', height: '50px' }} // Adjust dimensions as needed
+                  onClick={() => {
+                    // 显示图片预览
+                    this.setImgUrl(image_url)
+                    this.openImageLightbox()
+                  }}
+                  onMouseEnter={() => {
+                    // 改变鼠标样式
+                    document.body.style.cursor = "pointer"
+                  }}
+                  onMouseLeave={() => {
+                    // 改变鼠标样式
+                    document.body.style.cursor = "auto"
+                  }}
                 /> : ""
               )
             }} />
-            <Column title="发生地点(mm)" dataIndex="location" key="location" width={195} align="center" />
-            <Column title="是否报警" dataIndex="alarm" key="alarm" width={195} align="center" render={(alarm) => {
+            <Column title="是否报警" dataIndex="alarm" key="alarm" width={195} align="center" sorter={(a, b) => a.alarm - b.alarm} render={(alarm) => {
               let color =
-                alarm === true ? "green" : alarm === false ? "red" : "";
+                alarm === true ? "red" : alarm === false ? "green" : "";
               let alarm_status =
                 alarm === true ? "异常" : alarm === false ? "正常" : "";
               return (
@@ -329,6 +277,7 @@ class PatrolImageComponent extends Component {
                 </Tag>
               );
             }} />
+            <Column title="拍摄时间" dataIndex="created_at" key="created_at" width={195} align="center" sorter={(a, b) => a.created_at - b.created_at} />
             <Column title="操作" key="action" width={195} align="center" render={(text, row) => (
               <span>
                 <Button type="primary" shape="circle" icon="delete" title="删除" onClick={this.handleDelete.bind(null, row)} />
@@ -348,21 +297,12 @@ class PatrolImageComponent extends Component {
           showQuickJumper
           hideOnSinglePage={true}
         />
-        {/* <EditForm
-          currentRowData={this.state.currentRowData}
-          wrappedComponentRef={formRef => this.editformRef = formRef}
-          visible={this.state.editModalVisible}
-          confirmLoading={this.state.editModalLoading}
-          onCancel={this.handleCancel}
-          onOk={this.handleOk}
-        /> */}
-        {/* <AddTaskForm
-          wrappedComponentRef={formRef => this.addformRef = formRef}
-          visible={this.state.addModalVisible}
-          confirmLoading={this.state.addModalLoading}
-          onCancel={this.handleAddTaskCancel}
-          onOk={this.handleAddTaskOK}
-        /> */}
+        {this.state.isOpen && (
+          <Lightbox
+            mainSrc={this.state.img_url}
+            onCloseRequest={this.closeLightbox}
+          />
+        )}
       </div>
     );
   }
