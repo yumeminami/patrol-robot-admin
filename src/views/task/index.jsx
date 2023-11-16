@@ -345,7 +345,19 @@ class TaskComponent extends Component {
                 </Tag>
               );
             }} />
-            <Column title="执行时间" dataIndex="execution_times" key="execution_times" width={195} align="center" />
+            <Column
+              title="执行时间"
+              dataIndex="execution_times"
+              key="execution_times"
+              width={195}
+              align="center"
+              render={(execution_times) => {
+                const formattedTimes = execution_times.map((time) =>
+                  time.slice(0, 5)
+                );
+                return formattedTimes.join(", ");
+              }}
+            />
             <Column title="执行频率" dataIndex="execution_frequency" key="execution_frequency" width={195} align="center" />
             <Column title="操作" key="action" width={195} align="center" render={(text, row) => (
               <span>
