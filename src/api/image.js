@@ -35,7 +35,7 @@ export async function imageList(data) {
 
 export async function deleteItem(data) {
     try {
-        const response = await service.delete(`/tasks/${data.id}`);
+        const response = await service.delete(`/patrol_images/${data.id}`);
         console.log(response.data);
         return {
             code: 200,
