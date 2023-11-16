@@ -26,10 +26,10 @@ jobs:
       # 生成静态文件
       - name: Build
         run: npm install && npm run build 
-      # 部署到 GitHub Pages
-      - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@releases/v3
-        with:
-          GITHUB_TOKEN: ${{ secrets.CI_SECRET }}
-          BRANCH: gh-pages
-          FOLDER: build
+      # # 部署到 GitHub Pages
+      # - name: Deploy
+      #   uses: JamesIves/github-pages-deploy-action@releases/v3
+      #   with:
+      #     GITHUB_TOKEN: ${{ secrets.CI_SECRET }}
+      #     BRANCH: gh-pages
+      #     FOLDER: build
