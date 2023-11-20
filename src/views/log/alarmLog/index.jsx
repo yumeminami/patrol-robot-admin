@@ -63,12 +63,12 @@ class TaskComponent extends Component {
     this._isMounted = false;
   }
 
-  filterNameChange = (e) => {
+  filterTypeChange = (e) => {
     let value = e.target.value
     this.setState((state) => ({
       listQuery: {
         ...state.listQuery,
-        name: value,
+        type: value,
       }
     }));
   };
@@ -255,6 +255,9 @@ class TaskComponent extends Component {
         <Collapse defaultActiveKey={["1"]}>
           <Panel header="筛选" key="1">
             <Form layout="inline">
+              <Form.Item label="异常类型:">
+                <Input onChange={this.filterTypeChange} />
+              </Form.Item>
               <Form.Item label="异常状态:">
                 <Select
                   style={{ width: 120 }}
