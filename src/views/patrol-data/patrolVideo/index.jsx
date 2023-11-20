@@ -9,6 +9,8 @@ import {
   message,
   Select,
   Card,
+  Modal,
+  Typography,
 } from "antd";
 import { videoList, deleteItem } from "@/api/video";
 import Lightbox from "react-image-lightbox";
@@ -37,8 +39,8 @@ class PatrolImageComponent extends Component {
     filename: "excel-file",
     autoWidth: true,
     bookType: "xlsx",
-    isOpen: false,
-    img_url: "",
+    video_url: "",
+    videoVisible: false,
   };
   fetchData = () => {
     this.setState({ loading: true });
@@ -155,20 +157,14 @@ class PatrolImageComponent extends Component {
     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
   };
 
-  openImageLightbox = () => {
-    this.setState({ isOpen: true });
-  };
-
-  closeLightbox = () => {
-    this.setState({ isOpen: false });
-  };
-
-  setImgUrl = (img_url) => {
-    this.setState({ img_url });
+  setVideoUrl = (video_url) => {
+    this.setState({ video_url });
+    this.setState({ videoVisible: true });
   }
 
-  clearImgUrl = () => {
-    this.setState({ img_url: "" });
+  clearVideoUrl = () => {
+    this.setState({ videoVisible: false });
+    this.setState({ video_url: "" });
   }
 
   render() {
@@ -180,7 +176,7 @@ class PatrolImageComponent extends Component {
     };
     const title = (
       <span>
-        {this.state.seleted ? <Button type='danger' onClick={this.handleBatchDelete}>删除异常</Button> : null}
+        {this.state.seleted ? <Button type='danger' onClick={this.handleBatchDelete}>删除视频</Button> : null}
       </span>
     )
 
@@ -195,14 +191,6 @@ class PatrolImageComponent extends Component {
                   onChange={this.filterAlarmChange}>
                   <Select.Option value={true}>异常</Select.Option>
                   <Select.Option value={false}>正常</Select.Option>
-                </Select>
-              </Form.Item>
-              <Form.Item label="异常级别:">
-                <Select
-                  style={{ width: 120 }}
-                  onChange={this.filterLevelChange}>
-                  <Select.Option value={0}>严重</Select.Option>
-                  <Select.Option value={1}>警告</Select.Option>
                 </Select>
               </Form.Item>
               <Form.Item>
@@ -228,26 +216,12 @@ class PatrolImageComponent extends Component {
             <Column title="任务ID" dataIndex="task_id" key="task_id" width={120} align="center" />
             <Column title="开始位置" dataIndex="start_position" key="start_position" width={120} align="center" />
             <Column title="结束位置" dataIndex="end_position" key="end_position" width={120} align="center" />
-            <Column title="巡检图片" dataIndex="image_url" key="image_url" width={195} align="center" render={(image_url) => {
+            <Column title="巡检视频" dataIndex="video_url" key="video_url" width={195} align="center" render={(video_url) => {
               return (
-                image_url ? <img
-                  src={image_url}
-                  alt="IMG"
-                  style={{ width: '50px', height: '50px' }} // Adjust dimensions as needed
-                  onClick={() => {
-                    // 显示图片预览
-                    this.setImgUrl(image_url)
-                    this.openImageLightbox()
-                  }}
-                  onMouseEnter={() => {
-                    // 改变鼠标样式
-                    document.body.style.cursor = "pointer"
-                  }}
-                  onMouseLeave={() => {
-                    // 改变鼠标样式
-                    document.body.style.cursor = "auto"
-                  }}
-                /> : ""
+                video_url ? <Button type="primary" shape="circle" icon="video-camera" title="查看视频" onClick={() => {
+                  this.setVideoUrl(video_url)
+                }
+                } /> : <span>无</span>
               )
             }} />
             <Column title="是否报警" dataIndex="alarm" key="alarm" width={195} align="center" sorter={(a, b) => a.alarm - b.alarm} render={(alarm) => {
@@ -281,12 +255,10 @@ class PatrolImageComponent extends Component {
           showQuickJumper
           hideOnSinglePage={true}
         />
-        {this.state.isOpen && (
-          <Lightbox
-            mainSrc={this.state.img_url}
-            onCloseRequest={this.closeLightbox}
-          />
-        )}
+        <Modal visible={this.state.videoVisible} footer={null} onCancel={this.clearVideoUrl}>
+          <Typography style={{ textAlign: "center" }}>巡检视频</Typography>
+          <video src={this.state.video_url} controls="controls" width="100%" height="100%" />
+        </Modal>
       </div>
     );
   }
