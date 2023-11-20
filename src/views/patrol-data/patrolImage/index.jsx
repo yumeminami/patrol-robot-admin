@@ -180,7 +180,7 @@ class PatrolImageComponent extends Component {
     };
     const title = (
       <span>
-        {this.state.seleted ? <Button type='danger' onClick={this.handleBatchDelete}>删除异常</Button> : null}
+        {this.state.seleted ? <Button type='danger' onClick={this.handleBatchDelete}>删除图片</Button> : null}
       </span>
     )
 

@@ -340,7 +340,7 @@ class TaskComponent extends Component {
                 </Tag>
               );
             }} />
-            <Column title="发生时间" dataIndex="time" key="time" width={195} align="center" sorter={(a, b) => a.time - b.time} />
+            <Column title="发生时间" dataIndex="created_at" key="created_at" width={195} align="center" />
             <Column title="异常详情" dataIndex="detail" key="detail" width={195} align="center" />
             <Column title="发生地点(mm)" dataIndex="location" key="location" width={195} align="center" />
             <Column title="操作" key="action" width={195} align="center" render={(text, row) => (

@@ -58,6 +58,7 @@ class EditForm extends Component {
               initialValue: status,
             })(
               <Select style={{ width: 120 }}>
+                <Select.Option value={1}>执行中</Select.Option>
                 <Select.Option value={2}>待命中</Select.Option>
                 <Select.Option value={3}>已停止</Select.Option>
               </Select>
