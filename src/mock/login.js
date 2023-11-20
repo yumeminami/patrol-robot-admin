@@ -19,13 +19,13 @@ const users = {
     avatar: "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png",
     description:"可以看到除户管理页面之外的所有页面",
   },
-  "guest-token": {
-    id: "guest",
-    role: "guest",
-    name: "游客",
-    avatar: "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png",
-    description:"仅能看到Dashboard、作者博客、权限测试和关于作者四个页面",
-  },
+  // "guest-token": {
+  //   id: "guest",
+  //   role: "guest",
+  //   name: "游客",
+  //   avatar: "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png",
+  //   description:"仅能看到Dashboard、作者博客、权限测试和关于作者四个页面",
+  // },
 };
 
 export default {

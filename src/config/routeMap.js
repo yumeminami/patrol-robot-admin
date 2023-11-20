@@ -22,6 +22,7 @@ const Tasklog = Loadable({loader: () => import(/*webpackChunkName:'Task'*/'@/vie
 const Algorithm = Loadable({loader: () => import(/*webpackChunkName:'Task'*/'@/views/setting/algorithms'),loading: Loading});
 const StepForm = Loadable({loader: () => import(/*webpackChunkName:'StepForm'*/'@/views/step-forms/step-form'),loading: Loading});
 const PatrolImage = Loadable({loader: () => import(/*webpackChunkName:'PatrolImage'*/'@/views/patrol-data/patrolImage'),loading: Loading});
+const PatrolVideo = Loadable({loader: () => import(/*webpackChunkName:'PatrolVideo'*/'@/views/patrol-data/patrolVideo'),loading: Loading});
 const Checkpoint = Loadable({loader: () => import(/*webpackChunkName:'Task'*/'@/views/setting/checkpoints'),loading: Loading});
 const ExportExcel = Loadable({loader: () => import(/*webpackChunkName:'ExportExcel'*/'@/views/excel/exportExcel'),loading: Loading});
 const UploadExcel = Loadable({ loader: () => import(/*webpackChunkName:'UploadExcel'*/'@/views/excel/uploadExcel'),loading: Loading });
@@ -54,7 +55,8 @@ export default [
   { path: "/log/task", component: Tasklog, roles: ["admin", "editor"] },
   { path: "/setting/algorithms", component: Algorithm, roles: ["admin", "editor"] },
   { path: "/setting/checkpoints", component: Checkpoint, roles: ["admin", "editor"] },
-  { path: "/patrol-data/patrol-image", component: PatrolImage, roles: ["admin","editor"] },
+  { path: "/patrol-data/patrol-image", component: PatrolImage, roles: ["admin", "editor"] },
+  { path: "/patrol-data/patrol-video", component: PatrolVideo, roles: ["admin", "editor"] },
   { path: "/excel/export", component: ExportExcel, roles: ["admin","editor"] },
   { path: "/excel/upload", component: UploadExcel, roles: ["admin","editor"] },
   { path: "/zip", component: Zip, roles: ["admin","editor"] },
