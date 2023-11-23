@@ -149,6 +149,31 @@ class TaskComponent extends Component {
     });
   };
 
+  handleBatchStop = () => {
+    const ids = this.state.selectedRowKeys
+    const stopPromises = ids.map(id => editItem({ id, status: 3 }));
+
+    Promise.all(stopPromises)
+      .then(responses => {
+        message.success("停止成功");
+        this.setState({
+          selectedRowKeys: [],
+          selectedRows: [],
+          seleted: false,
+        });
+        this.fetchData();
+      })
+      .catch(error => {
+        message.error("停止失败，请重试");
+      });
+  }
+  handleEdit = (row) => {
+    this.setState({
+      currentRowData: Object.assign({}, row),
+      editModalVisible: true,
+    });
+  };
+
 
   handleOk = () => {
     const { form } = this.editformRef.props;
@@ -253,8 +278,10 @@ class TaskComponent extends Component {
     const title = (
       <span>
         <Button type='primary' onClick={this.handleAdd}>添加任务</Button>
-        <Divider type="vertical" />
+        {this.state.seleted ? <Divider type="vertical" /> : null}
         {this.state.seleted ? <Button type='danger' onClick={this.handleBatchDelete}>删除任务</Button> : null}
+        {this.state.seleted ? <Divider type="vertical" /> : null}
+        {this.state.seleted ? <Button type='danger' onClick={this.handleBatchStop}>停止任务</Button> : null}
       </span>
     )
 
@@ -400,7 +427,7 @@ class TaskComponent extends Component {
         />
         <AddFrom
           visible={this.state.addModalVisible}
-          onCancel={() => { this.fetchData();  this.setState({ addModalVisible: false }) }}
+          onCancel={() => { this.fetchData(); this.setState({ addModalVisible: false }) }}
         />
       </div>
     );
