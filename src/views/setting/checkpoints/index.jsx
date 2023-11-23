@@ -16,7 +16,9 @@ import {
   Radio
 } from "antd";
 import { checkpointsList, deleteItem, editItem, addItem } from "@/api/checkpoints";
+import { gimbalpointList } from "@/api/gimbalpoints";
 import EditForm from "./forms/editForm"
+import AddTaskForm from "./forms/addForm"
 const { Column } = Table;
 const { Panel } = Collapse;
 class TaskComponent extends Component {
@@ -41,6 +43,7 @@ class TaskComponent extends Component {
     filename: "excel-file",
     autoWidth: true,
     bookType: "xlsx",
+    gimbalpointList: [],
   };
   fetchData = () => {
     this.setState({ loading: true });
@@ -54,9 +57,20 @@ class TaskComponent extends Component {
       }
     });
   };
+  fetchGimbalpointData = () => {
+    gimbalpointList({ all: true }).then((response) => {
+      const gimbalpointList = response.list;
+      console.log(gimbalpointList)
+      if (this._isMounted) {
+        this.setState({ gimbalpointList });
+      }
+    });
+  };
   componentDidMount() {
     this._isMounted = true;
     this.fetchData();
+    this.fetchGimbalpointData();
+    console.log(this.state.gimbalpointList)
   }
   componentWillUnmount() {
     this._isMounted = false;
@@ -182,6 +196,49 @@ class TaskComponent extends Component {
     });
   };
 
+  handleAdd = () => {
+    this.setState({
+      addModalVisible: true,
+    });
+  };
+
+  handleAddOk = () => {
+    const { form } = this.addformRef.props;
+    form.validateFields((err, fieldsValue) => {
+      if (err) {
+        return;
+      }
+      const values = {
+        ...fieldsValue,
+      };
+      this.setState({ addModalLoading: true, });
+      values.velocity = parseFloat(values.velocity)
+      values.position = parseFloat(values.position)
+      console.log(values)
+      // this.setState({ addModalVisible: false, addModalLoading: false });
+      addItem(values).then((response) => {
+        form.resetFields();
+        console.log(response)
+        if (response.code === 200) {
+          this.setState({ addModalVisible: false, addModalLoading: false });
+          message.success("编辑成功")
+        } else {
+          this.setState({ addModalVisible: false });
+          message.error("编辑失败")
+        }
+        this.fetchData()
+      }).catch(e => {
+        message.error("编辑失败,请重试!")
+      })
+    });
+  };
+
+  handleAddCancel = _ => {
+    this.setState({
+      addModalVisible: false,
+    });
+  };
+
   formatJson(filterVal, jsonData) {
     return jsonData.map(v => filterVal.map(j => v[j]))
   }
@@ -245,7 +302,7 @@ class TaskComponent extends Component {
     };
     const title = (
       <span>
-        <Button type='primary' onClick={this.handleAddTask}>添加巡检点</Button>
+        <Button type='primary' onClick={this.handleAdd}>添加巡检点</Button>
         <Divider type="vertical" />
         {this.state.seleted ? <Button type='danger' onClick={this.handleBatchDelete}>删除巡检点</Button> : null}
       </span>
@@ -337,14 +394,16 @@ class TaskComponent extends Component {
           confirmLoading={this.state.editModalLoading}
           onCancel={this.handleCancel}
           onOk={this.handleOk}
+          gimbalpointList={this.state.gimbalpointList}
         />
-        {/* <AddTaskForm
+        <AddTaskForm
           wrappedComponentRef={formRef => this.addformRef = formRef}
           visible={this.state.addModalVisible}
           confirmLoading={this.state.addModalLoading}
-          onCancel={this.handleAddTaskCancel}
-          onOk={this.handleAddTaskOK}
-        /> */}
+          onCancel={this.handleAddCancel}
+          onOk={this.handleAddOk}
+          gimbalpointList={this.state.gimbalpointList}
+        />
       </div>
     );
   }

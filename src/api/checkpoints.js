@@ -32,12 +32,20 @@ export async function checkpointsList(data) {
     }
 }
 
-export function addItem(data) {
-    return request({
-        url: '/task/add',
-        method: 'post',
-        data
-    })
+export async function addItem(data) {
+    try {
+        const response = await service.post('/checkpoints', data)
+        console.log(response.data)
+        return {
+            code: 200,
+        }
+    }
+    catch (error) {
+        console.log(error)
+        return {
+            code: 400
+        }
+    }
 }
 
 export async function deleteItem(data) {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Select, Input, Button, Radio, Alert, Table } from 'antd';
+import { Form, Select, Input, Button, Radio, Table } from 'antd';
 import FormItem from 'antd/lib/form/FormItem';
 import { algorithmList } from "@/api/algorithms";
 import { robotList } from "@/api/robot";
