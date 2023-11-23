@@ -1,3 +1,5 @@
+import LOGO from "@/assets/images/LOGO.jpg";
+
 const tokens = {
   admin: "admin-token",
   guest: "guest-token",
@@ -9,7 +11,7 @@ const users = {
     id: "admin",
     role: "admin",
     name: "管理员",
-    avatar: "https://s1.ax1x.com/2020/04/28/J5hUaT.jpg",
+    avatar: LOGO,
     description: "拥有系统内所有菜单和路由权限",
   },
   "editor-token": {
@@ -17,7 +19,7 @@ const users = {
     role: "editor",
     name: "编辑员",
     avatar: "https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png",
-    description:"可以看到除户管理页面之外的所有页面",
+    description: "可以看到除户管理页面之外的所有页面",
   },
   // "guest-token": {
   //   id: "guest",

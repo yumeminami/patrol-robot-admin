@@ -1,7 +1,6 @@
 import React from "react";
 import TypingCard from "@/components/TypingCard";
-import wechat from "@/assets/images/wechat.jpg";
-import reward from "@/assets/images/reward.jpg";
+
 const About = () => {
   const cardContent = `
     <p>大家好，我是难凉热血。</p>
@@ -16,8 +15,6 @@ const About = () => {
     <p>您的赞赏，是我不断前进的动力！</p>
     <p>Ps:最近好多朋友加我微信问我一些问题，结果问完连个 star 也不给我点，好心塞啊~~~</p>
     <p>求大佬们点个 star 啦，感谢感谢~~</p>
-    <img src="${wechat}" alt="wechat" style="height:550px"/>
-    <img src="${reward}" alt="reward" style="height:550px"/>
   `;
   return (
     <div className="app-container">

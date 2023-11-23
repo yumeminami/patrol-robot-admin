@@ -7,7 +7,6 @@ export async function taskList(data) {
         const { pageNumber, pageSize, name, status, type } = data;
         const response = await service.get('/tasks');
         let list = response.data;
-        let total = response.data.length
         let start = (pageNumber - 1) * pageSize;
         let end = pageNumber * pageSize;
         let mockList = list.filter((item) => {
@@ -23,6 +22,7 @@ export async function taskList(data) {
             return true;
         });
         let pageList = mockList.slice(start, end);
+        let total = mockList.length;
         return {
             list: pageList,
             total: total,
