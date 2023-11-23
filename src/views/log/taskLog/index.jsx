@@ -305,9 +305,9 @@ class TaskComponent extends Component {
             <Column title="执行时间" dataIndex="execution_date" key="execution_date" width={150} align="center" />
             <Column title="任务状态" dataIndex="status" key="status" width={195} align="center" render={(status) => {
               let color =
-                status === 0 ? "green" : status === 1 ? "blue" : status === 3 ? "red" : "";
+                status === 0 ? "green" : status === 1 ? "blue" : status === 2 ? "red" : "";
               let task_status =
-                status === 0 ? "完成" : status === 1 ? "执行" : status === 3 ? "失败" : ""
+                status === 0 ? "完成" : status === 1 ? "执行" : status === 2 ? "失败" : ""
               return (
                 <Tag color={color} key={status}>
                   {task_status}

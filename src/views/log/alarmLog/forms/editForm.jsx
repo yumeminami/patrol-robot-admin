@@ -32,7 +32,7 @@ class EditForm extends Component {
       currentRowData,
     } = this.props;
     const { getFieldDecorator } = form;
-    const { id, status, time, img_url, video_url } = currentRowData;
+    const { id, status, created_at, img_url, video_url } = currentRowData;
     const formItemLayout = {
       labelCol: {
         sm: { span: 4 },
@@ -75,8 +75,8 @@ class EditForm extends Component {
           </Form.Item>
 
           <Form.Item label="发生时间:">
-            {getFieldDecorator("time", {
-              initialValue: time
+            {getFieldDecorator("created_at", {
+              initialValue: created_at
             })(<Input disabled />)}
           </Form.Item>
           <Form.Item label="异常图片:">

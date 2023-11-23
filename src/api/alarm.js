@@ -8,7 +8,6 @@ export async function alarmList(data) {
         const { pageNumber, pageSize, status, level, type } = data;
         const response = await service.get('/alarm_logs?all=true');
         let list = response.data;
-        let total = response.data.length
         let start = (pageNumber - 1) * pageSize;
         let end = pageNumber * pageSize;
         let mockList = list.filter((item) => {
@@ -24,6 +23,7 @@ export async function alarmList(data) {
             return true;
         });
         let pageList = mockList.slice(start, end);
+        let total = mockList.length;
         return {
             list: pageList,
             total: total,

@@ -6,13 +6,13 @@ export async function imageList(data) {
         const { pageNumber, pageSize, all, alarm } = data;
         const response = await service.get('/patrol_images?all=true');
         let list = response.data;
-        let total = response.data.length
         let start = (pageNumber - 1) * pageSize;
         let end = pageNumber * pageSize;
         let mockList = list.filter((item) => {
             if (alarm !== undefined && item.alarm !== alarm) return false;
             return true;
         });
+        let total = mockList.length;
         let pageList =
             all ? mockList :
                 mockList.slice(start, end);

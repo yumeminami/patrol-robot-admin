@@ -17,7 +17,7 @@ import {
 } from "antd";
 import { taskList, deleteItem, editItem, addItem } from "@/api/task";
 import EditForm from "./forms/editForm"
-import service from "../../utils/request";
+import AddFrom from "./step-forms/addForm"
 const { Column } = Table;
 const { Panel } = Collapse;
 class TaskComponent extends Component {
@@ -237,6 +237,12 @@ class TaskComponent extends Component {
     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
   };
 
+  handleAdd = () => {
+    this.setState({
+      addModalVisible: true,
+    });
+  }
+
   render() {
 
     const { selectedRowKeys } = this.state;
@@ -246,7 +252,7 @@ class TaskComponent extends Component {
     };
     const title = (
       <span>
-        <Button type='primary' onClick={this.handleAddTask}>添加任务</Button>
+        <Button type='primary' onClick={this.handleAdd}>添加任务</Button>
         <Divider type="vertical" />
         {this.state.seleted ? <Button type='danger' onClick={this.handleBatchDelete}>删除任务</Button> : null}
       </span>
@@ -392,13 +398,10 @@ class TaskComponent extends Component {
           onCancel={this.handleCancel}
           onOk={this.handleOk}
         />
-        {/* <AddTaskForm
-          wrappedComponentRef={formRef => this.addformRef = formRef}
+        <AddFrom
           visible={this.state.addModalVisible}
-          confirmLoading={this.state.addModalLoading}
-          onCancel={this.handleAddTaskCancel}
-          onOk={this.handleAddTaskOK}
-        /> */}
+          onCancel={() => { this.fetchData();  this.setState({ addModalVisible: false }) }}
+        />
       </div>
     );
   }
