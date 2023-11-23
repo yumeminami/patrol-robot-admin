@@ -1,13 +1,6 @@
 
-<p align="center">
-   <a href="https://nlrx-wjc.github.io/react-antd-admin-template/" target="_blank">
-      <img src="./logo.png"/>
-   </a>
-</p>
-
 # 简介
-
-react-antd-admin-template是一个基于 `React` 和 `Ant Design` 的后台管理系统模板。它内置了用户登录/登出，动态路由，权限校验，用户管理等典型的业务模型，可以帮助你快速搭建企业级中后台产品原型。
+patrol-robot-admom是一个基于 `React` 和 `Ant Design` 的后台管理系统模板。它内置了用户登录/登出，动态路由，权限校验，用户管理等典型的业务模型。
 
 
 # 功能
@@ -26,17 +19,7 @@ react-antd-admin-template是一个基于 `React` 和 `Ant Design` 的后台管�
   - Screenfull全屏
   - 自适应收缩侧边栏
 
-- 编辑器
-  - 富文本
-  - Markdown
-
-- Excel
-  - 导出excel
-  - 导入excel
-  - 前端可视化excel
-
-- Zip
-  - 导出zip
+- ECharts 图表
 
 - 错误页面
   - 404
@@ -44,11 +27,30 @@ react-antd-admin-template是一个基于 `React` 和 `Ant Design` 的后台管�
 - 组件
   - 拖拽列表
 
-- 表格
-- Dashboard
-- 引导页
-- ECharts 图表
-- 剪贴板
+- 任务模块
+  - 任务列表
+  - 任务详情
+  - 任务编辑
+  - 任务新增
+  - 任务删除
+  - 任务导出
+
+- 日志模块
+  - 异常/任务日志列表
+  - 异常日志详情
+  - 异常/任务日志删除
+  - 异常/任务日志导出
+
+- 巡检数据模块
+  - 巡检图片/视频列表
+  - 巡检图片/视频详情
+  - 巡检图片/视频删除
+  - 巡检图片/视频导出
+
+- 基础配置
+  - 巡检点列表模块
+  - 视觉算法检测模块
+
 ```
 
 # 目录结构
@@ -57,6 +59,7 @@ react-antd-admin-template是一个基于 `React` 和 `Ant Design` 的后台管�
 ├─ public                     # 静态资源
 │   ├─ favicon.ico            # favicon图标
 │   └─ index.html             # html模板
+├─ build                      # 打包配置文件
 ├─ src                        # 项目源代码
 │   ├─ api                    # 所有请求
 │   ├─ assets                 # 图片 字体等静态资源
@@ -76,8 +79,6 @@ react-antd-admin-template是一个基于 `React` 和 `Ant Design` 的后台管�
 ├── .env.development          # 开发环境变量配置
 ├── .env.production           # 生产环境变量配置
 ├── config-overrides.js       # 对cra的webpack自定义配置
-├── deploy.sh                 # CI部署脚本
-├── .travis.yml               # 自动化CI配置
 └── package.json              # package.json
 ```
 
@@ -85,10 +86,10 @@ react-antd-admin-template是一个基于 `React` 和 `Ant Design` 的后台管�
 
 ```shell
 # 克隆项目
-git clone https://github.com/NLRX-WJC/react-antd-admin-template.git
+git clone https://gitee.com/ZJCXJSLtd/patrol-robot-admin.git
 
 # 进入项目目录
-cd react-antd-admin-template
+cd patrol-robot-admin
 
 # 安装依赖
 npm install
@@ -101,3 +102,26 @@ npm start
 ```
 
 启动完成后会自动打开浏览器访问 [http://localhost:3000](http://localhost:3000)， 你看到下面的页面就代表操作成功了。
+
+
+# 部署
+
+注：项目数据不是mock的，需要后端支持，请求API地址在src/utils/request.js中进行配置baseURL
+
+```shell
+# 安装依赖
+npm install
+
+# 打包项目
+npm run build
+
+# 拉去Nginx镜像
+docker pull nginx
+
+# 运行Nginx容器 确保80端口没有被占用
+docker compose up -d
+
+# 访问页面
+浏览器访问
+http://127.0.0.1/patrol-robot-admin/index.html
+```
