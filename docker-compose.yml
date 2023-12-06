@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   panorama_video_website:
-    image: nginx:latest
+    image: patrol-robot-admin:latest
     container_name: patrol-robot-admin
     ports:
       - "80:80"
