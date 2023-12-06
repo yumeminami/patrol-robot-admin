@@ -79,7 +79,7 @@ class EditForm extends Component {
               initialValue: created_at
             })(<Input disabled />)}
           </Form.Item>
-          <Form.Item label="异常图片:">
+          {img_url ? <Form.Item label="异常图片:">
             {img_url ? (
               <div onClick={this.openImageLightbox}>
                 <img
@@ -89,8 +89,7 @@ class EditForm extends Component {
                 />
               </div>
             ) : null}
-          </Form.Item>
-          <Form.Item label="异常视频:">
+          </Form.Item> : <Form.Item label="异常视频:">
             {video_url ? (
               <video
                 controls
@@ -99,7 +98,9 @@ class EditForm extends Component {
                 <source src={video_url} type="video/mp4" />
               </video>
             ) : null}
-          </Form.Item>
+          </Form.Item>}
+
+
         </Form>
         {this.state.isOpen && (
           <Lightbox
