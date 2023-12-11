@@ -11,7 +11,7 @@ class Step2 extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            _isMounted: false, // 这个变量是用来标志当前组件是否挂载
+            _isMounted: false, 
             listQuery: {
                 pageNumber: 1,
                 pageSize: 10,

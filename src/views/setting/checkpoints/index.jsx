@@ -22,7 +22,7 @@ import AddTaskForm from "./forms/addForm"
 const { Column } = Table;
 const { Panel } = Collapse;
 class TaskComponent extends Component {
-  _isMounted = false; // 这个变量是用来标志当前组件是否挂载
+  _isMounted = false; 
   state = {
     list: [],
     loading: false,

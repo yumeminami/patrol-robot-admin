@@ -381,13 +381,6 @@ class TaskComponent extends Component {
           onCancel={this.handleCancel}
           onOk={this.handleOk}
         />
-        {/* <AddTaskForm
-          wrappedComponentRef={formRef => this.addformRef = formRef}
-          visible={this.state.addModalVisible}
-          confirmLoading={this.state.addModalLoading}
-          onCancel={this.handleAddTaskCancel}
-          onOk={this.handleAddTaskOK}
-        /> */}
       </div>
     );
   }

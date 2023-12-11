@@ -11,7 +11,7 @@ class Step1 extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            _isMounted: false, // 这个变量是用来标志当前组件是否挂载
+            _isMounted: false, 
             listQuery: {
                 pageNumber: 1,
                 pageSize: 10,
@@ -74,7 +74,6 @@ class Step1 extends React.Component {
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 console.log('Received values of form: ', values);
-                // 在这里处理表单提交
                 const name = this.props.form.getFieldValue('name');
                 const vision_algorithms = this.props.form.getFieldValue('algorithm');
                 const robot_id = this.props.form.getFieldValue('robot');

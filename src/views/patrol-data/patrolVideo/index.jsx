@@ -14,11 +14,11 @@ import {
 } from "antd";
 import { videoList, deleteItem } from "@/api/video";
 import Lightbox from "react-image-lightbox";
-import "react-image-lightbox/style.css"; // 引入样式
+import "react-image-lightbox/style.css"; 
 const { Column } = Table;
 const { Panel } = Collapse;
 class PatrolImageComponent extends Component {
-  _isMounted = false; // 这个变量是用来标志当前组件是否挂载
+  _isMounted = false; 
   state = {
     list: [],
     loading: false,

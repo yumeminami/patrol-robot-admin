@@ -9,13 +9,10 @@ class AddForm extends Component {
     const {
       visible,
       onCancel,
-      onOk,
       form,
       confirmLoading,
-      currentRowData,
     } = this.props;
     const { getFieldDecorator } = form;
-    // const { id, name, execution_times, status, type } = currentRowData;
     const formItemLayout = {
       labelCol: {
         sm: { span: 4 },
@@ -27,7 +24,7 @@ class AddForm extends Component {
     const final = false
     return (
       <Modal
-        title="编辑"
+        title="添加任务"
         visible={visible}
         onCancel={onCancel}
         confirmLoading={confirmLoading}
