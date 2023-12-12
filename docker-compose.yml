@@ -6,10 +6,11 @@ services:
       context: .
       dockerfile: Dockerfile
       target: patrol-robot-admin
-    image: patrol-robot-admin:latest
+    image: nginx:latest
     container_name: patrol-robot-admin
     ports:
       - "80:80"
     volumes:
       - ./conf.d:/etc/nginx/conf.d
+      - ./build:/patrol-robot-admin
     restart: always

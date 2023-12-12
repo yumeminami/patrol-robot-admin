@@ -5,7 +5,7 @@ export async function checkpointsList(data) {
     try {
         console.log(data)
         const { pageNumber, pageSize, name, type, all } = data;
-        const response = await service.get('/checkpoints');
+        const response = await service.get('/checkpoints?all=true');
         let list = response.data;
         let total = response.data.length
         let start = (pageNumber - 1) * pageSize;

@@ -37,6 +37,23 @@ export async function taskLogList(data) {
 
 }
 
+export async function getItem(data) {
+    try {
+        const response = await service.get(`/task_logs/${data.id}`);
+        console.log(response.data);
+        return {
+            code: 200,
+            data: response.data,
+        }
+    }
+    catch (error) {
+        console.log(error);
+        return {
+            code: 400,
+        };
+    }
+}
+
 export async function deleteItem(data) {
     try {
         const response = await service.delete(`/task_logs/${data.id}`);
