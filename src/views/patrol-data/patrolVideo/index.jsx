@@ -200,7 +200,8 @@ class PatrolImageComponent extends Component {
 
     const key = "download"
     for (let i = 0; i < urls.length; i++) {
-      const url = urls[i];
+      let url = urls[i];
+      url += (url.includes('?') ? '&' : '?') + 'noCache=' + new Date().getTime();
       const response = await fetch(url);
       const blob = await response.blob();
 
@@ -239,7 +240,8 @@ class PatrolImageComponent extends Component {
     message.loading({ content: 'Loading...', key });
 
     for (let i = 0; i < urls.length; i++) {
-      const url = urls[i];
+      let url = urls[i];
+      url += (url.includes('?') ? '&' : '?') + 'noCache=' + new Date().getTime();
       const response = await fetch(url);
       const blob = await response.blob();
 
