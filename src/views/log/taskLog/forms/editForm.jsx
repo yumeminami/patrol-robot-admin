@@ -4,7 +4,6 @@ import moment from "moment";
 import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css"; // 引入样式
 import "moment/locale/zh-cn";
-import { getItem } from "@/api/taskLog";
 moment.locale("zh-cn");
 class EditForm extends Component {
   _isMounted = false;

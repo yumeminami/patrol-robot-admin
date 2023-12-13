@@ -13,8 +13,6 @@ import {
   Select,
   Card,
   Icon,
-  Radio,
-  Image
 } from "antd";
 import { taskLogList, deleteItem, getItem } from "@/api/taskLog";
 import EditForm from "./forms/editForm"
