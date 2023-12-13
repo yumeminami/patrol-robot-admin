@@ -8,6 +8,7 @@ import RaddarChart from "./components/RaddarChart";
 import PieChart from "./components/PieChart";
 import TransactionTable from "./components/TransactionTable";
 import BoxCard from "./components/BoxCard";
+import TypingCard from '@/components/TypingCard'
 
 const lineChartDefaultData = {
   // "New Visits": {
@@ -35,10 +36,11 @@ const Dashboard = () => {
 
   const handleSetLineChartData = (type) => setLineChartData(lineChartDefaultData[type]);
 
+  const cardContent = `欢迎使用中吉创新管廊机器人后台系统，在这里你可以对机器人下达巡检任务，可以查看巡检过程中发生的异常，拍摄的图片，视频。`
   return (
     <div className="app-container">
       {/* <PanelGroup handleSetLineChartData={handleSetLineChartData} /> */}
-
+      <TypingCard title='首页' source={cardContent} />
       {/* <LineChart
         chartData={lineChartData}
         styles={{

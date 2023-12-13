@@ -16,11 +16,12 @@ import {
   Radio,
   Image
 } from "antd";
-import { taskLogList, deleteItem } from "@/api/taskLog";
+import { taskLogList, deleteItem, getItem } from "@/api/taskLog";
+import EditForm from "./forms/editForm"
 const { Column } = Table;
 const { Panel } = Collapse;
 class TaskComponent extends Component {
-  _isMounted = false; 
+  _isMounted = false;
   state = {
     list: [],
     loading: false,
@@ -142,9 +143,12 @@ class TaskComponent extends Component {
       });
   }
   handleEdit = (row) => {
-    this.setState({
-      currentRowData: Object.assign({}, row),
-      editModalVisible: true,
+    getItem(row.id).then((res) => {
+      console.log(res.data)
+      this.setState({
+        currentRowData: res.data,
+        editModalVisible: true,
+      });
     });
   };
 
@@ -315,6 +319,8 @@ class TaskComponent extends Component {
             }} />
             <Column title="操作" key="action" width={195} align="center" render={(text, row) => (
               <span>
+                <Button type="primary" shape="circle" icon="ellipsis" title="详情" onClick={this.handleEdit.bind(null, row)} />
+                <Divider type="vertical" />
                 <Button type="primary" shape="circle" icon="delete" title="删除" onClick={this.handleDelete.bind(null, row)} />
               </span>
             )} />
@@ -331,6 +337,13 @@ class TaskComponent extends Component {
           showSizeChanger
           showQuickJumper
           hideOnSinglePage={true}
+        />
+        <EditForm
+          currentRowData={this.state.currentRowData}
+          wrappedComponentRef={formRef => this.editformRef = formRef}
+          visible={this.state.editModalVisible}
+          confirmLoading={this.state.editModalLoading}
+          onCancel={this.handleCancel}
         />
       </div>
     );
