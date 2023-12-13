@@ -48,6 +48,22 @@ export async function addItem(data) {
     }
 }
 
+export async function batchAddItem(data) {
+    try {
+        const response = await service.post(`/checkpoints/batch?start=${data.start}&end=${data.end}&interval=${data.interval}&velocity=${data.velocity}`, data.gimbal_points)
+        console.log(response.data)
+        return {
+            code: 200,
+        }
+    }
+    catch (error) {
+        console.log(error)
+        return {
+            code: 400
+        }
+    }
+}
+
 export async function deleteItem(data) {
     try {
         const response = await service.delete(`/checkpoints/${data.id}`);
@@ -66,10 +82,17 @@ export async function deleteItem(data) {
 
 export async function editItem(data) {
     try {
-        const response = await service.put(`/checkpoints/${data.id}`, data)
-        console.log(response.data)
-        return {
-            code: 200,
+        const response = await service.delete(`/checkpoints/${data.id}`, data)
+        console.log(response.status)
+        if (response.status === 200) {
+            return {
+                code: 200,
+            }
+        }
+        else {
+            return {
+                code: 400,
+            }
         }
     }
     catch (error) {

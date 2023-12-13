@@ -19,10 +19,12 @@ import { checkpointsList, deleteItem, editItem, addItem } from "@/api/checkpoint
 import { gimbalpointList } from "@/api/gimbalpoints";
 import EditForm from "./forms/editForm"
 import AddTaskForm from "./forms/addForm"
+import BatchAddTaskForm from "./forms/batchAddForm"
+import { batchAddItem } from "../../../api/checkpoints";
 const { Column } = Table;
 const { Panel } = Collapse;
 class TaskComponent extends Component {
-  _isMounted = false; 
+  _isMounted = false;
   state = {
     list: [],
     loading: false,
@@ -35,6 +37,8 @@ class TaskComponent extends Component {
     addModalLoading: false,
     editModalVisible: false,
     editModalLoading: false,
+    batchAddModalVisible: false,
+    batchAddModalLoading: false,
     currentRowData: {
     },
     selectedRows: [],
@@ -141,9 +145,15 @@ class TaskComponent extends Component {
     const ids = this.state.selectedRowKeys
     const deletePromises = ids.map(id => deleteItem({ id }));
 
+    const success = true
     Promise.all(deletePromises)
       .then(responses => {
-        message.success("删除成功");
+        responses.forEach(response => {
+          if (response.code !== 200) {
+            success = false
+          }
+        });
+        success ? message.success("删除成功") : message.error("删除失败")
         this.setState({
           selectedRowKeys: [],
           selectedRows: [],
@@ -221,9 +231,43 @@ class TaskComponent extends Component {
         console.log(response)
         if (response.code === 200) {
           this.setState({ addModalVisible: false, addModalLoading: false });
-          message.success("编辑成功")
+          message.success("创建成功")
         } else {
           this.setState({ addModalVisible: false });
+          message.error("创建失败")
+        }
+        this.fetchData()
+      }).catch(e => {
+        message.error("创建失败,请重试!")
+      })
+    });
+  };
+
+  handleBatchAddOk = () => {
+    const { form } = this.batchAddformRef.props;
+    form.validateFields((err, fieldsValue) => {
+      if (err) {
+        return;
+      }
+      const values = {
+        ...fieldsValue,
+      };
+      this.setState({ batchAddModalLoading: true, });
+      // remove name
+      delete values.name
+      values.start = parseFloat(values.start)
+      values.end = parseFloat(values.end)
+      values.interval = parseFloat(values.interval)
+      values.velocity = parseFloat(values.velocity)
+      console.log(values)
+      batchAddItem(values).then((response) => {
+        form.resetFields();
+        console.log(response)
+        if (response.code === 200) {
+          this.setState({ batchAddModalVisible: false, batchAddModalLoading: false });
+          message.success("编辑成功")
+        } else {
+          this.setState({ addModalVisible: false , batchAddModalLoading: false});
           message.error("编辑失败")
         }
         this.fetchData()
@@ -233,9 +277,16 @@ class TaskComponent extends Component {
     });
   };
 
+
   handleAddCancel = _ => {
     this.setState({
       addModalVisible: false,
+    });
+  };
+
+  handleBatchAddCancel = _ => {
+    this.setState({
+      batchAddModalVisible: false,
     });
   };
 
@@ -303,6 +354,8 @@ class TaskComponent extends Component {
     const title = (
       <span>
         <Button type='primary' onClick={this.handleAdd}>添加巡检点</Button>
+        <Divider type="vertical" />
+        <Button type='primary' onClick={_ => this.setState({ batchAddModalVisible: true })}>批量添加巡检点</Button>
         <Divider type="vertical" />
         {this.state.seleted ? <Button type='danger' onClick={this.handleBatchDelete}>删除巡检点</Button> : null}
       </span>
@@ -396,6 +449,14 @@ class TaskComponent extends Component {
           onOk={this.handleOk}
           gimbalpointList={this.state.gimbalpointList}
         />
+        <BatchAddTaskForm
+          wrappedComponentRef={formRef => this.batchAddformRef = formRef}
+          visible={this.state.batchAddModalVisible}
+          confirmLoading={this.state.batchAddModalLoading}
+          onCancel={this.handleBatchAddCancel}
+          onOk={this.handleBatchAddOk}
+          gimbalpointList={this.state.gimbalpointList}
+        />
         <AddTaskForm
           wrappedComponentRef={formRef => this.addformRef = formRef}
           visible={this.state.addModalVisible}
@@ -404,6 +465,7 @@ class TaskComponent extends Component {
           onOk={this.handleAddOk}
           gimbalpointList={this.state.gimbalpointList}
         />
+
       </div>
     );
   }
