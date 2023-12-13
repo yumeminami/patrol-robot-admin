@@ -5,7 +5,7 @@ export async function taskList(data) {
     try {
         console.log(data)
         const { pageNumber, pageSize, name, status, type } = data;
-        const response = await service.get('/tasks');
+        const response = await service.get('/tasks?all=true');
         let list = response.data;
         let start = (pageNumber - 1) * pageSize;
         let end = pageNumber * pageSize;

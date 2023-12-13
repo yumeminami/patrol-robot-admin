@@ -5,7 +5,7 @@ export async function gimbalpointList(data) {
     try {
         console.log(data)
         const { pageNumber, pageSize, name, type, all } = data;
-        const response = await service.get('/gimbalpoints');
+        const response = await service.get('/gimbalpoints?all=true');
         let list = response.data;
         let total = response.data.length
         let start = (pageNumber - 1) * pageSize;

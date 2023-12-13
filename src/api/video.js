@@ -4,7 +4,7 @@ export async function videoList(data) {
     try {
         console.log(data)
         const { pageNumber, pageSize, all, alarm } = data;
-        const response = await service.get('/patrol_videos');
+        const response = await service.get('/patrol_videos?all=true');
         let list = response.data;
         let total = response.data.length
         let start = (pageNumber - 1) * pageSize;
