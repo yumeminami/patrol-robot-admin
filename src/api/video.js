@@ -3,7 +3,7 @@ import service from '../utils/request'
 export async function videoList(data) {
     try {
         console.log(data)
-        const { pageNumber, pageSize, all, alarm } = data;
+        const { pageNumber, pageSize, all, alarm, task_log_id } = data;
         const response = await service.get('/patrol_videos?all=true');
         let list = response.data;
         let total = response.data.length
@@ -11,6 +11,7 @@ export async function videoList(data) {
         let end = pageNumber * pageSize;
         let mockList = list.filter((item) => {
             if (alarm != undefined && item.alarm != alarm) return false;
+            if (task_log_id && item.task_log_id !== task_log_id) return false;
             return true;
         });
         let pageList =

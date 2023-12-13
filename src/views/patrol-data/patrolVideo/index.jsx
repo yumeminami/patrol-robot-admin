@@ -11,14 +11,14 @@ import {
   Card,
   Modal,
   Typography,
+  Input
 } from "antd";
 import { videoList, deleteItem } from "@/api/video";
-import Lightbox from "react-image-lightbox";
-import "react-image-lightbox/style.css"; 
+import "react-image-lightbox/style.css";
 const { Column } = Table;
 const { Panel } = Collapse;
 class PatrolImageComponent extends Component {
-  _isMounted = false; 
+  _isMounted = false;
   state = {
     list: [],
     loading: false,
@@ -61,6 +61,16 @@ class PatrolImageComponent extends Component {
   componentWillUnmount() {
     this._isMounted = false;
   }
+
+  filterTaskLogIdChange = (e) => {
+    let value = e.target.value
+    this.setState((state) => ({
+      listQuery: {
+        ...state.listQuery,
+        task_log_id: parseInt(value),
+      }
+    }));
+  };
 
   filterALarmChange = (value) => {
     this.setState((state) => ({
@@ -185,6 +195,9 @@ class PatrolImageComponent extends Component {
         <Collapse defaultActiveKey={["1"]}>
           <Panel header="筛选" key="1">
             <Form layout="inline">
+              <Form.Item label="任务日志ID:">
+                <Input onChange={this.filterTaskLogIdChange} />
+              </Form.Item>
               <Form.Item label="异常状态:">
                 <Select
                   style={{ width: 120 }}
@@ -213,7 +226,7 @@ class PatrolImageComponent extends Component {
             rowSelection={rowSelection}
           >
             <Column title="ID" dataIndex="id" key="id" width={200} align="center" sorter={(a, b) => a.id - b.id} />
-            <Column title="任务ID" dataIndex="task_id" key="task_id" width={120} align="center" />
+            <Column title="任务日志ID" dataIndex="task_log_id" key="task_log_id" width={120} align="center" />
             <Column title="开始位置" dataIndex="start_position" key="start_position" width={120} align="center" />
             <Column title="结束位置" dataIndex="end_position" key="end_position" width={120} align="center" />
             <Column title="巡检视频" dataIndex="video_url" key="video_url" width={195} align="center" render={(video_url) => {

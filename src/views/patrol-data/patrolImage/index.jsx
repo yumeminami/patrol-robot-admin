@@ -9,6 +9,7 @@ import {
   message,
   Select,
   Card,
+  Input
 } from "antd";
 import { imageList, deleteItem } from "@/api/image";
 import Lightbox from "react-image-lightbox";
@@ -60,6 +61,15 @@ class PatrolImageComponent extends Component {
     this._isMounted = false;
   }
 
+  filterTaskLogIdChange = (e) => {
+    let value = e.target.value
+    this.setState((state) => ({
+      listQuery: {
+        ...state.listQuery,
+        task_log_id: parseInt(value),
+      }
+    }));
+  };
   filterAlarmChange = (value) => {
     this.setState((state) => ({
       listQuery: {
@@ -189,6 +199,9 @@ class PatrolImageComponent extends Component {
         <Collapse defaultActiveKey={["1"]}>
           <Panel header="筛选" key="1">
             <Form layout="inline">
+              <Form.Item label="任务日志ID:">
+                <Input onChange={this.filterTaskLogIdChange} />
+              </Form.Item>
               <Form.Item label="异常状态:">
                 <Select
                   style={{ width: 120 }}
@@ -217,7 +230,7 @@ class PatrolImageComponent extends Component {
             rowSelection={rowSelection}
           >
             <Column title="ID" dataIndex="id" key="id" width={200} align="center" sorter={(a, b) => a.id - b.id} />
-            <Column title="任务ID" dataIndex="task_id" key="task_id" width={120} align="center" />
+            <Column title="任务日志ID" dataIndex="task_log_id" key="task_log_id" width={120} align="center" />
             <Column title="巡检点ID" dataIndex="checkpoint_id" key="checkpoint_id" width={120} align="center" />
             <Column title="巡检图片" dataIndex="image_url" key="image_url" width={195} align="center" render={(image_url) => {
               return (
