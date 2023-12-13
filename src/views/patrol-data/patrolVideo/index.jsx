@@ -11,10 +11,12 @@ import {
   Card,
   Modal,
   Typography,
-  Input
+  Input,
+  Divider
 } from "antd";
 import { videoList, deleteItem } from "@/api/video";
 import "react-image-lightbox/style.css";
+import JSZip from 'jszip';
 const { Column } = Table;
 const { Panel } = Collapse;
 class PatrolImageComponent extends Component {
@@ -41,6 +43,7 @@ class PatrolImageComponent extends Component {
     bookType: "xlsx",
     video_url: "",
     videoVisible: false,
+    all_data: [],
   };
   fetchData = () => {
     this.setState({ loading: true });
@@ -54,9 +57,21 @@ class PatrolImageComponent extends Component {
       }
     });
   };
+  fetchAllData = () => {
+    this.setState({ loading: true });
+    videoList({ all: true }).then((response) => {
+      this.setState({ loading: false });
+      console.log(response)
+      const all_data = response.list;
+      if (this._isMounted) {
+        this.setState({ all_data });
+      }
+    });
+  };
   componentDidMount() {
     this._isMounted = true;
     this.fetchData();
+    this.fetchAllData();
   }
   componentWillUnmount() {
     this._isMounted = false;
@@ -177,6 +192,79 @@ class PatrolImageComponent extends Component {
     this.setState({ video_url: "" });
   }
 
+  handleExport = async () => {
+    const datas = this.state.selectedRows;
+    const urls = datas.map(data => data.video_url);
+
+    const zip = new JSZip();
+
+    const key = "download"
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const response = await fetch(url);
+      const blob = await response.blob();
+
+      let filename = url.split('/').pop();
+      if (!filename.endsWith('.mp4')) {
+        filename += '.mp4';
+      }
+
+      zip.file(filename, blob, { binary: true });
+      message.loading({ content: `${i + 1}/${urls.length}`, key });
+    }
+
+    zip.generateAsync({ type: 'blob' }).then(function (content) {
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(content);
+      link.download = 'videos.zip';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+
+    setTimeout(() => {
+      message.success({ content: 'Download success!', key, duration: 2 });
+    }, 1000);
+  }
+
+
+  handleExportAll = async () => {
+    const datas = this.state.all_data;
+    const urls = datas.map(data => data.video_url);
+
+    const zip = new JSZip();
+
+    const key = "download"
+
+    message.loading({ content: 'Loading...', key });
+
+    for (let i = 0; i < urls.length; i++) {
+      const url = urls[i];
+      const response = await fetch(url);
+      const blob = await response.blob();
+
+      let filename = url.split('/').pop();
+      if (!filename.endsWith('.mp4')) {
+        filename += '.mp4';
+      }
+      zip.file(filename, blob, { binary: true });
+      message.loading({ content: `${i + 1}/${urls.length}`, key });
+    }
+
+    zip.generateAsync({ type: 'blob' }).then(function (content) {
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(content);
+      link.download = 'videos.zip';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+    setTimeout(() => {
+      message.success({ content: 'Download success!', key, duration: 2 });
+    }, 1000);
+
+  }
+
   render() {
 
     const { selectedRowKeys } = this.state;
@@ -186,7 +274,13 @@ class PatrolImageComponent extends Component {
     };
     const title = (
       <span>
-        {this.state.seleted ? <Button type='danger' onClick={this.handleBatchDelete}>删除视频</Button> : null}
+        {this.state.seleted ? <div>
+          <Button type='primary' onClick={this.handleExport} >导出所选</Button>
+          <Divider type="vertical" />
+          <Button type='primary' onClick={this.handleExportAll}>导出全部</Button>
+          <Divider type="vertical" />
+          <Button type='danger' onClick={this.handleBatchDelete}>删除视频</Button>
+        </div> : null}
       </span>
     )
 
