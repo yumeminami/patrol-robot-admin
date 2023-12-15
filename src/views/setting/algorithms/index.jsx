@@ -19,7 +19,7 @@ import { algorithmList, deleteItem, editItem, addItem } from "@/api/algorithms";
 import EditForm from "./forms/editForm"
 const { Column } = Table;
 const { Panel } = Collapse;
-class TaskComponent extends Component {
+class VisionAlgorihtmComponent extends Component {
   _isMounted = false; // 这个变量是用来标志当前组件是否挂载
   state = {
     allData: [],
@@ -355,9 +355,7 @@ class TaskComponent extends Component {
             <Column title="操作" key="action" width={195} align="center" render={(text, row) => (
               <span>
                 <Button type="primary" shape="circle" icon="ellipsis" title="详情" onClick={this.handleEdit.bind(null, row)} />
-                <Divider type="vertical" />
-                <Button type="primary" shape="circle" icon="delete" title="删除" onClick={this.handleDelete.bind(null, row)} />
-              </span>
+             </span>
             )} />
           </Table>
         </Card>
@@ -386,4 +384,4 @@ class TaskComponent extends Component {
   }
 }
 
-export default TaskComponent;
+export default VisionAlgorihtmComponent;
