@@ -315,6 +315,7 @@ class TaskComponent extends Component {
                 </Tag>
               );
             }} />
+            <Column title="详情" dataIndex="detail" key="detail" width={100} align="center" />
             <Column title="操作" key="action" width={195} align="center" render={(text, row) => (
               <span>
                 <Button type="primary" shape="circle" icon="ellipsis" title="详情" onClick={this.handleEdit.bind(null, row)} />
