@@ -18,7 +18,7 @@ import { taskLogList, deleteItem, getItem } from "@/api/taskLog";
 import EditForm from "./forms/editForm"
 const { Column } = Table;
 const { Panel } = Collapse;
-class TaskComponent extends Component {
+class TaskLogComponent extends Component {
   _isMounted = false;
   state = {
     list: [],
@@ -349,4 +349,4 @@ class TaskComponent extends Component {
   }
 }
 
-export default TaskComponent;
+export default TaskLogComponent;
