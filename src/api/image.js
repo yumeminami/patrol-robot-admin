@@ -3,7 +3,7 @@ import service from '../utils/request'
 export async function imageList(data) {
     try {
         console.log(data)
-        const { pageNumber, pageSize, all, alarm, task_log_id } = data;
+        const { pageNumber, pageSize, all, alarm, task_log_id, position } = data;
         const response = await service.get('/patrol_images?all=true');
         let list = response.data;
         let start = (pageNumber - 1) * pageSize;
@@ -11,6 +11,7 @@ export async function imageList(data) {
         let mockList = list.filter((item) => {
             if (alarm !== undefined && item.alarm !== alarm) return false;
             if (task_log_id && item.task_log_id !== task_log_id) return false;
+            if (position && item.position !== position) return false;
             return true;
         });
         let total = mockList.length;
