@@ -169,8 +169,8 @@ class TaskLogComponent extends Component {
       loading: true,
     });
     import("@/lib/Export2Excel").then((excel) => {
-      const tHeader = ["Id", "任务ID", "任务类型（0：自动任务，1：常规任务）", "机器人ID", "执行时间", "任务状态（0：完成，1：失败）"];
-      const filterVal = ["id", "task_id", "type", "robot_id", "execution_date", "status"];
+      const tHeader = ["Id", "任务ID", "任务类型（0：自动任务，1：常规任务）", "机器人ID", "执行时间", "任务状态（0：完成，1：失败）","详情"];
+      const filterVal = ["id", "task_id", "type", "robot_id", "execution_date", "status","detail"];
       const list = this.state.selectedRows;
       const data = this.formatJson(filterVal, list);
       excel.export_json_to_excel({

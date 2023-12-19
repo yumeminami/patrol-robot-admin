@@ -221,8 +221,8 @@ class TaskComponent extends Component {
       loading: true,
     });
     import("@/lib/Export2Excel").then((excel) => {
-      const tHeader = ["Id", "Name", "Type", "Status", "RobotId", "ExecutionTimes"];
-      const filterVal = ["id", "name", "type", "status", "robot_id", "execution_times"];
+      const tHeader = ["Id", "名称", "类型(0:自动任务,1:常规任务)", "状态(1:执行中,2:待命中,3:已停止)", "机器人ID", "执行时间(多个时间用逗号隔开)", "执行频率"];
+      const filterVal = ["id", "", "type", "status", "robot_id", "execution_times", "execution_frequency"];
       const list = this.state.selectedRows;
       const data = this.formatJson(filterVal, list);
       excel.export_json_to_excel({
