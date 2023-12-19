@@ -4,6 +4,8 @@ import moment from "moment";
 import Lightbox from "react-image-lightbox";
 import "react-image-lightbox/style.css"; // 引入样式
 import "moment/locale/zh-cn";
+import PatrolImageComponent from "./imageForm";
+import PatrolVideoComponent from "./videoForm";
 moment.locale("zh-cn");
 class EditForm extends Component {
   _isMounted = false;
@@ -17,8 +19,6 @@ class EditForm extends Component {
   }
   componentDidMount() {
     this._isMounted = true;
-    // this.fetchData();
-    console.log(this.props.currentRowData);
   }
   componentWillUnmount() {
     this._isMounted = false;
@@ -42,7 +42,7 @@ class EditForm extends Component {
       currentRowData,
     } = this.props;
     const { getFieldDecorator } = form;
-    const { id, status, patrol_images, patrol_videos, execution_date } = currentRowData;
+    const { id, status, patrol_images, patrol_videos, execution_date, type } = currentRowData;
     const formItemLayout = {
       labelCol: {
         sm: { span: 4 },
@@ -65,6 +65,7 @@ class EditForm extends Component {
         onCancel={onCancel}
         confirmLoading={confirmLoading}
         footer={null}
+        width={1600}
       >
         <Form {...formItemLayout}>
           <Form.Item label="ID:">
@@ -85,7 +86,7 @@ class EditForm extends Component {
               initialValue: execution_date
             })(<Input disabled />)}
           </Form.Item>
-          {
+          {/* {
             patrol_images && patrol_images.length > 0 && <Form.Item label="巡检图片:">
               {patrol_images.map((item, index) => (
                 <div key={index} onClick={() => this.setState({ isOpen: true, img_url: item })}>
@@ -97,8 +98,8 @@ class EditForm extends Component {
                 </div>
               ))}
             </Form.Item>
-          }
-          {
+          } */}
+          {/* {
             patrol_videos && patrol_videos.length > 0 && <Form.Item label="巡检视频:">
               {patrol_videos.map((item, index) => (
                 <div key={index}>
@@ -111,8 +112,11 @@ class EditForm extends Component {
                 </div>
               ))}
             </Form.Item>
-          }
+          } */}
         </Form>
+        {
+          type == 0 ? <PatrolVideoComponent task_log_id={id} /> : <PatrolImageComponent task_log_id={id} />
+        }
         {this.state.isOpen && (
           <Lightbox
             mainSrc={this.state.img_url}

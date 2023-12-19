@@ -6,14 +6,14 @@ export async function videoList(data) {
         const { pageNumber, pageSize, all, alarm, task_log_id } = data;
         const response = await service.get('/patrol_videos?all=true');
         let list = response.data;
-        let total = response.data.length
         let start = (pageNumber - 1) * pageSize;
         let end = pageNumber * pageSize;
         let mockList = list.filter((item) => {
-            if (alarm != undefined && item.alarm != alarm) return false;
+            if (alarm !== undefined && item.alarm != alarm) return false;
             if (task_log_id && item.task_log_id !== task_log_id) return false;
             return true;
         });
+        let total = mockList.length;
         let pageList =
             all ? mockList :
                 mockList.slice(start, end);

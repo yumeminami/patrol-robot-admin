@@ -45,7 +45,6 @@ class TaskLogComponent extends Component {
     this.setState({ loading: true });
     taskLogList(this.state.listQuery).then((response) => {
       this.setState({ loading: false });
-      console.log(response)
       const list = response.list;
       const total = response.total;
       if (this._isMounted) {
@@ -142,7 +141,6 @@ class TaskLogComponent extends Component {
   }
   handleEdit = (row) => {
     getItem(row.id).then((res) => {
-      console.log(res.data)
       this.setState({
         currentRowData: res.data,
         editModalVisible: true,
@@ -209,7 +207,6 @@ class TaskLogComponent extends Component {
   onSelectChange = (selectedRowKeys, selectedRows) => {
     this.setState({ selectedRows, selectedRowKeys });
     this.setState({ seleted: selectedRowKeys.length > 0 })
-    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
   };
 
   render() {

@@ -19,8 +19,11 @@ import "react-image-lightbox/style.css";
 import JSZip from 'jszip';
 const { Column } = Table;
 const { Panel } = Collapse;
-class PatrolImageComponent extends Component {
+class PatrolVideoComponent extends Component {
   _isMounted = false;
+  constructor(props) {
+    super(props);
+  }
   state = {
     list: [],
     loading: false,
@@ -28,6 +31,7 @@ class PatrolImageComponent extends Component {
     listQuery: {
       pageNumber: 1,
       pageSize: 10,
+      task_log_id: this.props.task_log_id,
     },
     addModalVisible: false,
     addModalLoading: false,
@@ -76,7 +80,19 @@ class PatrolImageComponent extends Component {
   componentWillUnmount() {
     this._isMounted = false;
   }
-
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.task_log_id !== this.props.task_log_id) {
+      this.setState((state) => ({
+        listQuery: {
+          pageNumber: 1,
+          pageSize: 10,
+          task_log_id: this.props.task_log_id,
+        },
+      }), () => {
+        this.fetchData();
+      });
+    }
+  }
   filterTaskLogIdChange = (e) => {
     let value = e.target.value
     this.setState((state) => ({
@@ -291,9 +307,6 @@ class PatrolImageComponent extends Component {
         <Collapse defaultActiveKey={["1"]}>
           <Panel header="筛选" key="1">
             <Form layout="inline">
-              <Form.Item label="任务日志ID:">
-                <Input onChange={this.filterTaskLogIdChange} />
-              </Form.Item>
               <Form.Item label="异常状态:">
                 <Select
                   style={{ width: 120 }}
@@ -373,4 +386,4 @@ class PatrolImageComponent extends Component {
   }
 }
 
-export default PatrolImageComponent;
+export default PatrolVideoComponent;

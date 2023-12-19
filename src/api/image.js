@@ -2,7 +2,6 @@ import service from '../utils/request'
 
 export async function imageList(data) {
     try {
-        console.log(data)
         const { pageNumber, pageSize, all, alarm, task_log_id, position } = data;
         const response = await service.get('/patrol_images?all=true');
         let list = response.data;
